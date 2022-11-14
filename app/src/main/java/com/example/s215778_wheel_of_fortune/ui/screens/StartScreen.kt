@@ -27,7 +27,6 @@ import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartScreen (modifier: Modifier = Modifier) {
     Scaffold(
@@ -47,19 +46,19 @@ fun StartScreen (modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
-                Spacer(modifier = Modifier.height(262.dp))
+                Spacer(modifier = Modifier.height(260.dp))
 
                 StartScreenButton(
-                    text = "Start Game",
+                    text = "Start Game1",
                     onClick = {/*TODO*/})
 
-                Spacer(modifier = Modifier.height(57.dp))
+                Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
                     text = "Game Rules",
                     onClick = {/*TODO*/})
 
-                Spacer(modifier = Modifier.height(57.dp))
+                Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
                     text = "Exit Game",
