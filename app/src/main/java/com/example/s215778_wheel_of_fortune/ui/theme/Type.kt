@@ -2,9 +2,11 @@ package com.example.s215778_wheel_of_fortune.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.s215778_wheel_of_fortune.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -26,3 +28,6 @@ val Typography = Typography(
     )
     */
 )
+val halantRegular = FontFamily(Font(R.font.halant_regular))
+
+val halantBold = FontFamily(Font(R.font.halant_bold, weight = FontWeight.Bold))
