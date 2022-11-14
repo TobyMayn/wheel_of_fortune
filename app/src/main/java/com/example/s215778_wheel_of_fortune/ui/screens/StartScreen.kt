@@ -21,6 +21,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import com.example.s215778_wheel_of_fortune.ui.components.StartScreenButton
+import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 
@@ -30,19 +32,11 @@ import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 fun StartScreen (modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Wheel Of Fortune",
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.app_cream),
-                        fontFamily = halantBold,
-                        fontSize = 32.sp
-                    )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(colorResource(id = R.color.app_background)),
-                modifier = Modifier.padding(top = 30.dp)
-            )},
+            TopBar(
+                titleText = "Wheel Of Fortune",
+                color = R.color.app_background,
+                padding = 30.dp )
+        },
         backgroundColor = colorResource(id = R.color.app_background),
         content = {padding ->
             Column(
@@ -54,53 +48,22 @@ fun StartScreen (modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 Spacer(modifier = Modifier.height(262.dp))
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.app_red)),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier
-                        .width(235.dp)
-                        .height(58.dp)
-                ) {
-                    Text(
-                        text = "Start Game",
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.app_cream),
-                        fontFamily = halantRegular,
-                        fontSize = 32.sp
-                    )
-                }
+
+                StartScreenButton(
+                    text = "Start Game",
+                    onClick = {/*TODO*/})
+
                 Spacer(modifier = Modifier.height(57.dp))
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.app_red)),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier
-                        .width(235.dp)
-                        .height(58.dp)
-                ) {
-                    Text(
-                        text = "Game Rules",
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.app_cream),
-                        fontFamily = halantRegular,
-                        fontSize = 32.sp
-                    )
-                }
+
+                StartScreenButton(
+                    text = "Game Rules",
+                    onClick = {/*TODO*/})
+
                 Spacer(modifier = Modifier.height(57.dp))
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.app_red)),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier
-                        .width(235.dp)
-                        .height(58.dp)
-                ) {
-                    Text(
-                        text = "Exit Game",
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.app_cream),
-                        fontFamily = halantRegular,
-                        fontSize = 32.sp
-                    )
-                }
+
+                StartScreenButton(
+                    text = "Exit Game",
+                    onClick = {/*TODO*/})
             }
         }
     )
