@@ -101,7 +101,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                     }
                 }
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text = "Lives",
@@ -119,7 +119,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(44.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
                     Text(text = "Score",
                         textAlign = TextAlign.Center,
                         color = colorResource(id = R.color.app_cream),
@@ -153,34 +153,37 @@ fun GameScreen(modifier: Modifier = Modifier){
 
                         )
                     }
+                    Row(modifier = Modifier.align(Alignment.CenterStart)) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(onClick = { /*TODO*/ },
+                            shape = RoundedCornerShape(100),
+                            modifier = Modifier
+                                .size(88.dp),
+                            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
 
-                    Button(onClick = { /*TODO*/ },
-                        shape = RoundedCornerShape(100),
-                        modifier = Modifier
-                            .size(88.dp)
-                            .align(Alignment.CenterStart),
-                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+                        ) {
+                            Text(text = "Game Rules",
+                                textAlign = TextAlign.Center,
+                                color = colorResource(id = R.color.app_cream),
 
-                    ) {
-                        Text(text = "Game Rules",
-                            textAlign = TextAlign.Center,
-                            color = colorResource(id = R.color.app_cream),
-
-                            )
+                                )
+                        }
                     }
+                    Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                        Button(onClick = { /*TODO*/ },
+                            shape = RoundedCornerShape(100),
+                            modifier = Modifier
+                                .size(88.dp),
+                            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
 
-                    Button(onClick = { /*TODO*/ },
-                        shape = RoundedCornerShape(100),
-                        modifier = Modifier
-                            .size(88.dp)
-                            .align(Alignment.CenterEnd),
-                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+                        ) {
+                            Text(text = "Exit Game",
+                                textAlign = TextAlign.Center,
+                                color = colorResource(id = R.color.app_cream),
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
 
-                    ) {
-                        Text(text = "Exit Game",
-                            textAlign = TextAlign.Center,
-                            color = colorResource(id = R.color.app_cream),
-                        )
                     }
                 }
             }
