@@ -26,15 +26,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.s215778_wheel_of_fortune.R
 import com.example.s215778_wheel_of_fortune.model.CharacterCard
+import com.example.s215778_wheel_of_fortune.model.DisplayMatrix
 import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
-val matrixHeight = 4
-val matrixWidth = 14
-var matrix = Array(matrixHeight){Array(matrixWidth){CharacterCard(null, false)}}
+//Matrix
+var m = DisplayMatrix()
 
 
 @Composable
@@ -63,7 +63,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                     contentPadding = PaddingValues(10.dp),
                     content = {
                         for (i in 0..3){
-                            items(matrix[i]) { item ->
+                            items(m.matrix[i]) { item ->
                                 Card (
                                     modifier = Modifier
                                         .padding(3.dp)
@@ -204,9 +204,9 @@ fun FillMatrix() {
     for (i in 0..3){
         for (j in 0..13){
             if (i == 1 && (j > 2 && j < 12) ){
-                matrix[i][j] = CharacterCard('t', true)
+                m.matrix[i][j] = CharacterCard('t', true)
             } else {
-                matrix[i][j] = CharacterCard(null, false)
+                m.matrix[i][j] = CharacterCard(null, false)
             }
         }
     }
