@@ -30,6 +30,7 @@ import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 import kotlin.random.Random
+import kotlin.system.exitProcess
 
 val matrixHeight = 4
 val matrixWidth = 14
@@ -170,7 +171,8 @@ fun GameScreen(modifier: Modifier = Modifier){
                         }
                     }
                     Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-                        Button(onClick = { /*TODO*/ },
+                        /*TODO: Create prompt to make sure user wants to exit*/
+                        Button(onClick = { exitProcess(0) },
                             shape = RoundedCornerShape(100),
                             modifier = Modifier
                                 .size(88.dp),

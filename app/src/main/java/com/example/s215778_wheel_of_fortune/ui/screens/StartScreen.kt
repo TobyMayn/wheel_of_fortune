@@ -25,6 +25,7 @@ import com.example.s215778_wheel_of_fortune.ui.components.StartScreenButton
 import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
+import kotlin.system.exitProcess
 
 
 @Composable
@@ -49,7 +50,7 @@ fun StartScreen (modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(260.dp))
 
                 StartScreenButton(
-                    text = "Start Game1",
+                    text = "Start Game",
                     onClick = {/*TODO*/})
 
                 Spacer(modifier = Modifier.height(50.dp))
@@ -62,7 +63,8 @@ fun StartScreen (modifier: Modifier = Modifier) {
 
                 StartScreenButton(
                     text = "Exit Game",
-                    onClick = {/*TODO*/})
+                    /*TODO: create prompt to make sure user wants to exit*/
+                    onClick = { exitProcess(0) })
             }
         }
     )
