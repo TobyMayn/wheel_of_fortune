@@ -5,5 +5,5 @@ class DisplayMatrix {
     private val matrixHeight = 4
     private val matrixWidth = 14
 
-    var matrix = Array(matrixHeight){Array(matrixWidth){CharacterCard(null, false)}}
+    var matrix = Array(matrixHeight){Array(matrixWidth){CharacterCard(null, false, 0)}}
 }

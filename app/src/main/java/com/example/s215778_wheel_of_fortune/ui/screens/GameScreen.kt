@@ -10,15 +10,14 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,15 +29,16 @@ import com.example.s215778_wheel_of_fortune.model.DisplayMatrix
 import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.theme.halantBold
 import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
-import kotlin.random.Random
+import com.example.s215778_wheel_of_fortune.viewModel.AppViewModel
 import kotlin.system.exitProcess
 
 //Matrix
 var m = DisplayMatrix()
 
-
 @Composable
 fun GameScreen(modifier: Modifier = Modifier){
+    val vm by remember { mutableStateOf(AppViewModel()) }
+
     Scaffold(
         topBar = {
             TopBar(
@@ -68,7 +68,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                                     modifier = Modifier
                                         .padding(3.dp)
                                         .height(30.dp),
-                                    backgroundColor = colorResource(id = R.color.app_red),
+                                    backgroundColor = colorResource(id = item.cardColor),
                                     shape = RoundedCornerShape(0.dp)
                                 ) {
                                     if(item.active)
@@ -134,13 +134,24 @@ fun GameScreen(modifier: Modifier = Modifier){
                         fontFamily = halantRegular,
                         fontSize = 16.sp)
                 }
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(25.dp))
+
+                var spinResult by remember { mutableStateOf("") }
+                Text(
+                    text = spinResult,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.app_cream),
+                    fontFamily = halantRegular,
+                    fontSize = 16.sp
+                )
 
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.height(180.dp)){
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ellipse_1),
                         contentDescription = "eclipse", modifier = Modifier.align(Alignment.BottomCenter))
-
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = {
+                        vm.spinTheWheel()
+                        spinResult = vm.spinResult
+                                     },
                         shape = RoundedCornerShape(100),
                         modifier = Modifier
                             .size(88.dp)
@@ -185,7 +196,6 @@ fun GameScreen(modifier: Modifier = Modifier){
                             )
                         }
                         Spacer(modifier = Modifier.width(10.dp))
-
                     }
                 }
             }
@@ -204,9 +214,9 @@ fun FillMatrix() {
     for (i in 0..3){
         for (j in 0..13){
             if (i == 1 && (j > 2 && j < 12) ){
-                m.matrix[i][j] = CharacterCard('t', true)
+                m.matrix[i][j] = CharacterCard('t', true, R.color.card_text_color)
             } else {
-                m.matrix[i][j] = CharacterCard(null, false)
+                m.matrix[i][j] = CharacterCard(null, false, R.color.app_red)
             }
         }
     }
