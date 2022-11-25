@@ -36,16 +36,14 @@ import kotlin.system.exitProcess
 var m = DisplayMatrix()
 
 @Composable
-fun GameScreen(modifier: Modifier = Modifier){
+fun GameScreen(
+    modifier: Modifier = Modifier,
+    onSpinClicked: () -> Unit,
+    onGameRulesClicked: () -> Unit,
+    onExitClicked: () -> Unit){
     val vm by remember { mutableStateOf(AppViewModel()) }
 
     Scaffold(
-        topBar = {
-            TopBar(
-                titleText = "Wheel Of Fortune",
-                color = R.color.app_background,
-                padding = 30.dp)
-            },
         backgroundColor = colorResource(id = R.color.app_background),
         content = {padding ->
             Column(
@@ -137,6 +135,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                 Spacer(modifier = Modifier.height(25.dp))
 
                 var spinResult by remember { mutableStateOf("") }
+
                 Text(
                     text = spinResult,
                     textAlign = TextAlign.Center,
@@ -149,8 +148,9 @@ fun GameScreen(modifier: Modifier = Modifier){
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ellipse_1),
                         contentDescription = "eclipse", modifier = Modifier.align(Alignment.BottomCenter))
                     Button(onClick = {
-                        vm.spinTheWheel()
-                        spinResult = vm.spinResult
+                        onSpinClicked()
+                        /*TODO: find out how this should be handled*/
+                        //spinResult = vm.spinResult
                                      },
                         shape = RoundedCornerShape(100),
                         modifier = Modifier
@@ -167,7 +167,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                     }
                     Row(modifier = Modifier.align(Alignment.CenterStart)) {
                         Spacer(modifier = Modifier.width(10.dp))
-                        Button(onClick = { /*TODO*/ },
+                        Button(onClick = { onGameRulesClicked() },
                             shape = RoundedCornerShape(100),
                             modifier = Modifier
                                 .size(88.dp),
@@ -183,7 +183,7 @@ fun GameScreen(modifier: Modifier = Modifier){
                     }
                     Row(modifier = Modifier.align(Alignment.CenterEnd)) {
                         /*TODO: Create prompt to make sure user wants to exit*/
-                        Button(onClick = { exitProcess(0) },
+                        Button(onClick = { onExitClicked() },
                             shape = RoundedCornerShape(100),
                             modifier = Modifier
                                 .size(88.dp),
@@ -207,7 +207,11 @@ fun GameScreen(modifier: Modifier = Modifier){
 @Composable
 fun GameScreenPreview(modifier: Modifier = Modifier){
     FillMatrix()
-    GameScreen()
+    GameScreen(
+        onSpinClicked = {},
+        onGameRulesClicked = {},
+        onExitClicked = {}
+    )
 }
 
 fun FillMatrix() {

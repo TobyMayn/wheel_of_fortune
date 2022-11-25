@@ -29,18 +29,16 @@ import kotlin.system.exitProcess
 
 
 @Composable
-fun StartScreen (modifier: Modifier = Modifier) {
+fun StartScreen (
+    modifier: Modifier = Modifier,
+    onStartClicked: () -> Unit,
+    onGameRulesClicked: () -> Unit,
+    onExitClicked: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopBar(
-                titleText = "Wheel Of Fortune",
-                color = R.color.app_background,
-                padding = 30.dp )
-        },
         backgroundColor = colorResource(id = R.color.app_background),
         content = {padding ->
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .background(colorResource(id = R.color.app_background))
                     .padding(padding),
@@ -51,20 +49,20 @@ fun StartScreen (modifier: Modifier = Modifier) {
 
                 StartScreenButton(
                     text = "Start Game",
-                    onClick = {/*TODO*/})
+                    onClick = {onStartClicked()})
 
                 Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
                     text = "Game Rules",
-                    onClick = {/*TODO*/})
+                    onClick = {onGameRulesClicked()})
 
                 Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
                     text = "Exit Game",
                     /*TODO: create prompt to make sure user wants to exit*/
-                    onClick = { exitProcess(0) })
+                    onClick = {onExitClicked()})
             }
         }
     )
@@ -76,5 +74,9 @@ fun StartScreen (modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun StartScreenPreview () {
-    StartScreen()
+    StartScreen(
+        onStartClicked = {},
+        onGameRulesClicked = {},
+        onExitClicked = {}
+    )
 }

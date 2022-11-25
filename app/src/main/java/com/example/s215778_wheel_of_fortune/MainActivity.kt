@@ -13,31 +13,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.s215778_wheel_of_fortune.ui.theme.S215778_wheel_of_fortuneTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             S215778_wheel_of_fortuneTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+                WheelOfFortuneApp()
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     S215778_wheel_of_fortuneTheme {
-        Greeting("Android")
+        WheelOfFortuneApp()
     }
 }
