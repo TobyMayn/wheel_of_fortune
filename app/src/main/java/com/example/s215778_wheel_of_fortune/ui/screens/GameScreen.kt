@@ -109,7 +109,7 @@ fun GameScreen(
                         fontFamily = halantRegular,
                         fontSize = 16.sp)
                     Row(modifier = Modifier.padding(8.dp)) {
-                        for (i in 0..4) {
+                        for (i in 0 until vm.lives) {
                             Spacer(modifier = Modifier.width(4.dp))
                             Canvas(modifier = Modifier.size(18.dp), onDraw = {
                                 drawCircle(color = Color.White)
@@ -126,7 +126,7 @@ fun GameScreen(
                         fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(7.dp))
 
-                    Text(text = "1000",
+                    Text(text = vm.score.toString(),
                         textAlign = TextAlign.Center,
                         color = colorResource(id = R.color.app_cream),
                         fontFamily = halantRegular,
@@ -150,7 +150,7 @@ fun GameScreen(
                     Button(onClick = {
                         onSpinClicked()
                         /*TODO: find out how this should be handled*/
-                        //spinResult = vm.spinResult
+                        spinResult = vm.spinResult
                                      },
                         shape = RoundedCornerShape(100),
                         modifier = Modifier
