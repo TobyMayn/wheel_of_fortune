@@ -45,6 +45,8 @@ fun WheelOfFortuneApp(
     //val backStackEntry by navController.currentBackStackEntryAsState()
 
     //val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
+    viewModel.selectWordAndCategory()
+    viewModel.fillMatrix()
 
     Scaffold(
         topBar = {
@@ -65,10 +67,12 @@ fun WheelOfFortuneApp(
                  )
             }
             composable(route = WheelOfFortuneScreen.Game.name){
+
                 GameScreen(
                     onSpinClicked = { viewModel.spinTheWheel() },
                     onGameRulesClicked = { navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
-                    onExitClicked = { exitProcess(0) }
+                    onExitClicked = { exitProcess(0) },
+                    vm = viewModel
                 )
             }
             composable(route = WheelOfFortuneScreen.GameHelp.name){

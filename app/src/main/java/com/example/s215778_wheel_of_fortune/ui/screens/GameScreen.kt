@@ -33,15 +33,14 @@ import com.example.s215778_wheel_of_fortune.viewModel.AppViewModel
 import kotlin.system.exitProcess
 
 //Matrix
-var m = DisplayMatrix()
 
 @Composable
 fun GameScreen(
     modifier: Modifier = Modifier,
     onSpinClicked: () -> Unit,
     onGameRulesClicked: () -> Unit,
-    onExitClicked: () -> Unit){
-    val vm by remember { mutableStateOf(AppViewModel()) }
+    onExitClicked: () -> Unit,
+    vm: AppViewModel){
 
     Scaffold(
         backgroundColor = colorResource(id = R.color.app_background),
@@ -56,12 +55,14 @@ fun GameScreen(
             {
                 Spacer(modifier = Modifier.height(0.dp))
 
+                var matrix = vm.matrix
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(14),
                     contentPadding = PaddingValues(10.dp),
                     content = {
                         for (i in 0..3){
-                            items(m.matrix[i]) { item ->
+                            items(matrix.matrix[i]) { item ->
                                 Card (
                                     modifier = Modifier
                                         .padding(3.dp)
@@ -75,8 +76,6 @@ fun GameScreen(
                                     else
                                         if (item.char == null) {
                                             Spacer(modifier = Modifier)
-                                        }else{
-                                            Text(text = item.char.toString())
                                         }
                                 }
                             }
@@ -85,13 +84,15 @@ fun GameScreen(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val category = vm.category
+
                 Card(modifier = Modifier
                     .height(40.dp)
                     .width(201.dp),
                     backgroundColor = colorResource(id = R.color.app_red),
                     shape = RoundedCornerShape(0.dp)) {
                     Box(contentAlignment = Alignment.Center) {
-                        Text(text = "Category",
+                        Text(text = category,
                             textAlign = TextAlign.Center,
                             color = colorResource(id = R.color.app_cream),
                             fontFamily = halantBold,
@@ -206,22 +207,15 @@ fun GameScreen(
 @Preview
 @Composable
 fun GameScreenPreview(modifier: Modifier = Modifier){
-    FillMatrix()
+    val vm = AppViewModel()
+
+    vm.selectWordAndCategory()
+    vm.fillMatrix()
+
     GameScreen(
         onSpinClicked = {},
         onGameRulesClicked = {},
-        onExitClicked = {}
+        onExitClicked = {},
+        vm = vm
     )
-}
-
-fun FillMatrix() {
-    for (i in 0..3){
-        for (j in 0..13){
-            if (i == 1 && (j > 2 && j < 12) ){
-                m.matrix[i][j] = CharacterCard('t', true, R.color.card_text_color)
-            } else {
-                m.matrix[i][j] = CharacterCard(null, false, R.color.app_red)
-            }
-        }
-    }
 }
