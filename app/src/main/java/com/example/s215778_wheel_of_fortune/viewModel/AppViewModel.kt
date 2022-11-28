@@ -84,6 +84,7 @@ class AppViewModel : ViewModel(){
             }
         }
     }
+    /*TODO: Maybe use built-in search function to search chars, maybe faster?*/
     // Helper function for fillMatrix
     private fun insertLettersTop(){
         for (i in 0..3){
