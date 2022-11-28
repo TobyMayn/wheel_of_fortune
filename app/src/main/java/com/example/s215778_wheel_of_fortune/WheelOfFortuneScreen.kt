@@ -28,7 +28,7 @@ enum class WheelOfFortuneScreen {
 }
 
 @Composable
-fun fortuneAppBar(modifier: Modifier = Modifier){
+fun FortuneAppBar(){
     TopBar(
         titleText = "Wheel Of Fortune",
         color = R.color.app_background,
@@ -42,15 +42,12 @@ fun WheelOfFortuneApp(
 ) {
     val navController = rememberNavController()
 
-    //val backStackEntry by navController.currentBackStackEntryAsState()
-
-    //val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
     viewModel.selectWordAndCategory()
     viewModel.fillMatrix()
 
     Scaffold(
         topBar = {
-            fortuneAppBar()
+            FortuneAppBar()
         }
     ) { innerPadding ->
         //val uiState by viewModel.uiState

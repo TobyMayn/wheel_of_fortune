@@ -1,6 +1,5 @@
 package com.example.s215778_wheel_of_fortune.ui.components
 
-import android.graphics.Color
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -25,7 +24,7 @@ fun TopBar(
     CenterAlignedTopAppBar (
         title = {
             Text(
-            text = "Wheel Of Fortune",
+            text = titleText,
             textAlign = TextAlign.Center,
             color = colorResource(id = R.color.app_cream),
             fontFamily = halantBold,

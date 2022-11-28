@@ -41,7 +41,6 @@ fun GameScreen(
     onGameRulesClicked: () -> Unit,
     onExitClicked: () -> Unit,
     vm: AppViewModel){
-
     Scaffold(
         backgroundColor = colorResource(id = R.color.app_background),
         content = {padding ->
@@ -55,7 +54,7 @@ fun GameScreen(
             {
                 Spacer(modifier = Modifier.height(0.dp))
 
-                var matrix = vm.matrix
+                val matrix by remember { mutableStateOf(vm.matrix)}
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(14),
@@ -70,7 +69,7 @@ fun GameScreen(
                                     backgroundColor = colorResource(id = item.cardColor),
                                     shape = RoundedCornerShape(0.dp)
                                 ) {
-                                    if(item.active)
+                                    if(item.active.value)
                                         Text(text = item.char.toString(),
                                             textAlign = TextAlign.Center)
                                     else
@@ -104,6 +103,7 @@ fun GameScreen(
                 Spacer(modifier = Modifier.height(25.dp))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
                     Text(text = "Lives",
                         textAlign = TextAlign.Center,
                         color = colorResource(id = R.color.app_cream),
@@ -136,7 +136,8 @@ fun GameScreen(
                 Spacer(modifier = Modifier.height(25.dp))
 
                 var spinResult by remember { mutableStateOf("") }
-
+                val openDialog = remember {mutableStateOf(false)}
+                vm.makeGuess(openDialog = openDialog)
                 Text(
                     text = spinResult,
                     textAlign = TextAlign.Center,
@@ -144,7 +145,6 @@ fun GameScreen(
                     fontFamily = halantRegular,
                     fontSize = 16.sp
                 )
-
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.height(180.dp)){
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ellipse_1),
                         contentDescription = "eclipse", modifier = Modifier.align(Alignment.BottomCenter))
@@ -152,7 +152,8 @@ fun GameScreen(
                         onSpinClicked()
                         /*TODO: find out how this should be handled*/
                         spinResult = vm.spinResult
-                                     },
+                        openDialog.value = true
+                    },
                         shape = RoundedCornerShape(100),
                         modifier = Modifier
                             .size(88.dp)
@@ -160,10 +161,9 @@ fun GameScreen(
                         colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
 
                     ) {
-                        Text(text = "Spin the wheel", 
+                        Text(text = "Spin the wheel",
                             textAlign = TextAlign.Center,
                             color = colorResource(id = R.color.app_cream),
-
                         )
                     }
                     Row(modifier = Modifier.align(Alignment.CenterStart)) {

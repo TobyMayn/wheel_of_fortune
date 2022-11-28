@@ -1,8 +1,11 @@
 package com.example.s215778_wheel_of_fortune.viewModel
 
-import androidx.compose.animation.scaleOut
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.example.s215778_wheel_of_fortune.R
 import com.example.s215778_wheel_of_fortune.model.*
@@ -15,6 +18,7 @@ class AppViewModel : ViewModel(){
     private val _user = User()
     private val spin = SpinWheelData()
 
+    private var guesses = ""
     private var _spinResult: String = ""
     private var _categories = listOf(
         Categories.fictionalCharacters,
@@ -23,23 +27,25 @@ class AppViewModel : ViewModel(){
         Categories.person,
         Categories.thing
     )
+    var gameRunning = true
 
     val spinResult: String
         get() = _spinResult
 
     // User score
     val score: Int
-        get() = _user.score
+        get() = _user.score.value
 
     // User lives
     val lives: Int
-        get() = _user.lives
+        get() = _user.lives.value
 
     val matrix: DisplayMatrix
         get() = _matrix
 
     val category: String
         get() = _category
+
     fun selectWordAndCategory() {
         val random = (0..4).random()
         //Select Category
@@ -63,13 +69,13 @@ class AppViewModel : ViewModel(){
                     if(_word[j-2] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_cream)
                     }
                 } else if (i == 2 && (j > 1 && j < 12) && !(j+8 >= _word.length)) {
                     if(_word[j+8] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_cream)
                     }
                 }
                 else {
@@ -87,7 +93,7 @@ class AppViewModel : ViewModel(){
                     if(_word[j-2] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_cream)
                     }
                 }
                 // Insert next ten letters in second row
@@ -95,7 +101,7 @@ class AppViewModel : ViewModel(){
                     if(_word[j+8] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_cream)
                     }
                 }
                 // Insert next ten letters in third row
@@ -103,7 +109,7 @@ class AppViewModel : ViewModel(){
                     if(_word[j+18] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+18], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+18], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+18], false, R.color.app_cream)
                     }
                 }
                 // Insert last ten letters in last row
@@ -111,7 +117,7 @@ class AppViewModel : ViewModel(){
                     if(_word[j+28] == ' ') {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+28], false, R.color.app_red)
                     } else {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+28], false, R.color.card_text_color)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+28], false, R.color.app_cream)
                     }
                 }
                 else {
@@ -121,18 +127,90 @@ class AppViewModel : ViewModel(){
         }
     }
 
-
-    fun updateScore(amount: Int){
-        _user.score += amount
+    @Composable
+    fun makeGuess(openDialog: MutableState<Boolean>) {
+        var guess by remember { mutableStateOf(TextFieldValue("")) }
+        if(openDialog.value){
+            AlertDialog(
+                onDismissRequest ={},
+                confirmButton = {
+                    Button(onClick = {
+                        if(guess.text != "") {
+                            openDialog.value = false
+                            checkGuessAndUpdatePlayer()
+                        }
+                    }) {
+                        Text(text = "Confirm guess")
+                    }
+                    guesses = guess.text},
+                title = {
+                    Text(text = "Make a guess")
+                },
+                text = {
+                    TextField(
+                        value = guess,
+                        onValueChange = {guess = it},
+                        label = { Text(text = "Guess")},
+                    )
+                }
+            )
+        }
     }
 
-    fun updateLives() {
-        _user.lives -= 1
+    fun checkGuessAndUpdatePlayer(){
+        var count = 0
+        if(guesses.length == 1){
+            for (i in 0..3){
+                for (j in 0..13) {
+                    if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
+                        count++
+                        updateCards(_matrix.matrix[i][j])
+                    }
+                }
+            }
+        } else if (guesses.length > 1){
+            if (guesses == _word){
+                gameRunning = false
+            } else {
+                updatePlayer(_spinResult.toInt(), count)
+            }
+        } else if(_spinResult == "Bankrupt"){
+            resetScore()
+        } else {
+            updatePlayer(_spinResult.toInt(), count)
+        }
+    }
+
+    private fun updateCards(card: CharacterCard){
+         card.active.value = true
+    }
+
+    private fun updatePlayer(score: Int, count: Int) {
+        var calcAmount = 0
+        if(count != 0) {
+            calcAmount = score*count
+            updateScore(calcAmount)
+        } else{
+            updateLives()
+        }
+    }
+
+    private fun updateScore(amount: Int){
+        if (amount != 0) {
+            _user.score.value += amount
+        }
+    }
+
+     private fun updateLives() {
+        _user.lives.value -= 1
     }
 
     fun spinTheWheel(){
         _spinResult = spin.points[(0..9).random()]
     }
 
+    private fun resetScore() {
+        _user.score.value = 0
+    }
 
 }
