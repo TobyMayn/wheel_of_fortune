@@ -61,7 +61,6 @@ fun StartScreen (
 
                 StartScreenButton(
                     text = "Exit Game",
-                    /*TODO: create prompt to make sure user wants to exit*/
                     onClick = {onExitClicked()})
             }
         }

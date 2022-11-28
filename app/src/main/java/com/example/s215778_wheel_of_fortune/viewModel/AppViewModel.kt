@@ -9,6 +9,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.example.s215778_wheel_of_fortune.R
 import com.example.s215778_wheel_of_fortune.model.*
+import kotlin.system.exitProcess
 
 class AppViewModel : ViewModel(){
     private lateinit var _category: String
@@ -27,7 +28,7 @@ class AppViewModel : ViewModel(){
         Categories.person,
         Categories.thing
     )
-    var gameRunning = true
+    private var gameRunning = true
 
     val spinResult: String
         get() = _spinResult
@@ -67,13 +68,13 @@ class AppViewModel : ViewModel(){
             for (j in 0..13){
                 if (i == 1 && (j > 1 && j < 12) && !(j-2 >= _word.length) ){
                     if(_word[j-2] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_cream)
                     }
                 } else if (i == 2 && (j > 1 && j < 12) && !(j+8 >= _word.length)) {
                     if(_word[j+8] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_cream)
                     }
@@ -92,7 +93,7 @@ class AppViewModel : ViewModel(){
                 // Insert first ten letters in top row
                 if (i == 0 && (j > 1 && j < 12) && !(j-2 >= _word.length)){
                     if(_word[j-2] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j-2], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j-2], false, R.color.app_cream)
                     }
@@ -100,7 +101,7 @@ class AppViewModel : ViewModel(){
                 // Insert next ten letters in second row
                 else if (i == 1 && (j > 1 && j < 12) && !(j+8 >= _word.length)) {
                     if(_word[j+8] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+8], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+8], false, R.color.app_cream)
                     }
@@ -108,7 +109,7 @@ class AppViewModel : ViewModel(){
                 // Insert next ten letters in third row
                 else if (i == 2 && (j > 1 && j < 12) && !(j+18 >= _word.length)) {
                     if(_word[j+18] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+18], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+18], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+18], false, R.color.app_cream)
                     }
@@ -116,7 +117,7 @@ class AppViewModel : ViewModel(){
                 // Insert last ten letters in last row
                 else if (i == 3 && (j > 1 && j < 12) && !(j+28 >= _word.length)){
                     if(_word[j+28] == ' ') {
-                        _matrix.matrix[i][j] = CharacterCard(_word[j+28], false, R.color.app_red)
+                        _matrix.matrix[i][j] = CharacterCard(_word[j+28], true, R.color.app_red)
                     } else {
                         _matrix.matrix[i][j] = CharacterCard(_word[j+28], false, R.color.app_cream)
                     }
@@ -139,6 +140,7 @@ class AppViewModel : ViewModel(){
                         if(guess.text != "") {
                             openDialog.value = false
                             checkGuessAndUpdatePlayer()
+                            checkGameWon()
                         }
                     }) {
                         Text(text = "Confirm guess")
@@ -158,7 +160,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
-    fun checkGuessAndUpdatePlayer(){
+    private fun checkGuessAndUpdatePlayer(){
         var count = 0
         if(guesses.length == 1){
             for (i in 0..3){
@@ -170,16 +172,13 @@ class AppViewModel : ViewModel(){
                 }
             }
         } else if (guesses.length > 1){
-            if (guesses == _word){
+            if (guesses.lowercase() == _word.lowercase()){
                 gameRunning = false
-            } else {
-                updatePlayer(_spinResult.toInt(), count)
             }
         } else if(_spinResult == "Bankrupt"){
             resetScore()
-        } else {
-            updatePlayer(_spinResult.toInt(), count)
         }
+        updatePlayer(_spinResult.toInt(), count)
     }
 
     private fun updateCards(card: CharacterCard){
@@ -192,7 +191,9 @@ class AppViewModel : ViewModel(){
             calcAmount = score*count
             updateScore(calcAmount)
         } else{
-            updateLives()
+            if(gameRunning){
+                updateLives()
+            }
         }
     }
 
@@ -212,6 +213,57 @@ class AppViewModel : ViewModel(){
 
     private fun resetScore() {
         _user.score.value = 0
+    }
+
+    private fun resetUser(){
+        _user.lives.value = 5
+        resetScore()
+    }
+
+    private fun checkGameWon(){
+
+    }
+
+    @Composable
+    private fun gameWon(){
+        if(!gameRunning){
+            AlertDialog(
+                onDismissRequest ={},
+                confirmButton = {
+                    Button(onClick = {
+                        resetUser()
+                        selectWordAndCategory()
+                        fillMatrix()
+                        gameRunning = true
+                    }) {
+                        Text(text = "Start New Game")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        exitProcess(0)
+                    }) {
+                        Text(text = "Exit Game")
+                    }
+                },
+                title = {
+                    Text(text = "Game Won!")
+                },
+                text = {
+                    Text(text = "Congrats, you've won the game!!")
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun gameLoop (openDialog: MutableState<Boolean>){
+        if (openDialog.value) {
+            makeGuess(openDialog = openDialog)
+        }
+        else if(!gameRunning) {
+            gameWon()
+        }
     }
 
 }

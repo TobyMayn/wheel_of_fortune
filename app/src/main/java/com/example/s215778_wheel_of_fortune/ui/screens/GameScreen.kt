@@ -32,7 +32,6 @@ import com.example.s215778_wheel_of_fortune.ui.theme.halantRegular
 import com.example.s215778_wheel_of_fortune.viewModel.AppViewModel
 import kotlin.system.exitProcess
 
-//Matrix
 
 @Composable
 fun GameScreen(
@@ -40,7 +39,8 @@ fun GameScreen(
     onSpinClicked: () -> Unit,
     onGameRulesClicked: () -> Unit,
     onExitClicked: () -> Unit,
-    vm: AppViewModel){
+    vm: AppViewModel) {
+
     Scaffold(
         backgroundColor = colorResource(id = R.color.app_background),
         content = {padding ->
@@ -137,7 +137,7 @@ fun GameScreen(
 
                 var spinResult by remember { mutableStateOf("") }
                 val openDialog = remember {mutableStateOf(false)}
-                vm.makeGuess(openDialog = openDialog)
+                vm.gameLoop(openDialog = openDialog)
                 Text(
                     text = spinResult,
                     textAlign = TextAlign.Center,
@@ -150,7 +150,6 @@ fun GameScreen(
                         contentDescription = "eclipse", modifier = Modifier.align(Alignment.BottomCenter))
                     Button(onClick = {
                         onSpinClicked()
-                        /*TODO: find out how this should be handled*/
                         spinResult = vm.spinResult
                         openDialog.value = true
                     },
@@ -178,12 +177,10 @@ fun GameScreen(
                             Text(text = "Game Rules",
                                 textAlign = TextAlign.Center,
                                 color = colorResource(id = R.color.app_cream),
-
                                 )
                         }
                     }
                     Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-                        /*TODO: Create prompt to make sure user wants to exit*/
                         Button(onClick = { onExitClicked() },
                             shape = RoundedCornerShape(100),
                             modifier = Modifier
