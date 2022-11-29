@@ -72,10 +72,6 @@ fun GameScreen(
                                     if(item.active.value)
                                         Text(text = item.char.toString(),
                                             textAlign = TextAlign.Center)
-                                    else
-                                        if (item.char == null) {
-                                            Spacer(modifier = Modifier)
-                                        }
                                 }
                             }
                         }

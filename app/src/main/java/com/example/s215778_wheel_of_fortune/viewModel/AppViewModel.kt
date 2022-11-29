@@ -7,6 +7,8 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.s215778_wheel_of_fortune.R
 import com.example.s215778_wheel_of_fortune.model.*
 import kotlin.system.exitProcess
@@ -131,52 +133,48 @@ class AppViewModel : ViewModel(){
 
     @Composable
     fun makeGuess(openDialog: MutableState<Boolean>) {
-        var guess by remember { mutableStateOf(TextFieldValue("")) }
-        if(openDialog.value){
-            AlertDialog(
-                onDismissRequest ={},
-                confirmButton = {
-                    Button(onClick = {
-                        if(guess.text != "") {
-                            openDialog.value = false
-                            checkGuessAndUpdatePlayer()
-                            checkGameWon()
+        if(_spinResult == "Bankrupt"){
+            resetScore()
+        } else {
+            var guess by remember { mutableStateOf(TextFieldValue("")) }
+            if(openDialog.value){
+                AlertDialog(
+                    onDismissRequest ={},
+                    confirmButton = {
+                        Button(onClick = {
+                            if(guess.text != "" && guess.text.length < 2) {
+                                openDialog.value = false
+                                checkGuessAndUpdatePlayer()
+                                checkGameWon()
+                            }
+                        }) {
+                            Text(text = "Confirm guess")
                         }
-                    }) {
-                        Text(text = "Confirm guess")
+                        guesses = guess.text},
+                    title = {
+                        Text(text = "Make a guess")
+                    },
+                    text = {
+                        TextField(
+                            value = guess,
+                            onValueChange = {guess = it},
+                            label = { Text(text = "Guess")},
+                        )
                     }
-                    guesses = guess.text},
-                title = {
-                    Text(text = "Make a guess")
-                },
-                text = {
-                    TextField(
-                        value = guess,
-                        onValueChange = {guess = it},
-                        label = { Text(text = "Guess")},
-                    )
-                }
-            )
+                )
+            }
         }
     }
 
     private fun checkGuessAndUpdatePlayer(){
         var count = 0
-        if(guesses.length == 1){
-            for (i in 0..3){
-                for (j in 0..13) {
-                    if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
-                        count++
-                        updateCards(_matrix.matrix[i][j])
-                    }
+        for (i in 0..3){
+            for (j in 0..13) {
+                if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
+                    count++
+                    updateCards(_matrix.matrix[i][j])
                 }
             }
-        } else if (guesses.length > 1){
-            if (guesses.lowercase() == _word.lowercase()){
-                gameRunning = false
-            }
-        } else if(_spinResult == "Bankrupt"){
-            resetScore()
         }
         updatePlayer(_spinResult.toInt(), count)
     }
@@ -221,7 +219,17 @@ class AppViewModel : ViewModel(){
     }
 
     private fun checkGameWon(){
-
+        var count = 0
+        for (i in 0..3){
+            for (j in 0..13) {
+                if(_matrix.matrix[i][j].active.value){
+                    count++
+                }
+            }
+        }
+        if(count == _word.length) {
+            gameRunning = false
+        }
     }
 
     @Composable
@@ -231,9 +239,6 @@ class AppViewModel : ViewModel(){
                 onDismissRequest ={},
                 confirmButton = {
                     Button(onClick = {
-                        resetUser()
-                        selectWordAndCategory()
-                        fillMatrix()
                         gameRunning = true
                     }) {
                         Text(text = "Start New Game")
@@ -264,6 +269,23 @@ class AppViewModel : ViewModel(){
         else if(!gameRunning) {
             gameWon()
         }
+    }
+    private fun resetValues(){
+        _matrix = DisplayMatrix()
+        _spinResult = ""
+        guesses = ""
+
+    }
+    private fun resetGame(){
+        resetUser()
+        resetValues()
+
+        selectWordAndCategory()
+        fillMatrix()
+    }
+
+    fun newGame() {
+        resetGame()
     }
 
 }

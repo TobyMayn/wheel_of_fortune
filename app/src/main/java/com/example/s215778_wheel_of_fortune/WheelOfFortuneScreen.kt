@@ -1,5 +1,11 @@
 package com.example.s215778_wheel_of_fortune
 
+/**
+ * Inspiration for the setup of the project has been drawn from The Cupcake App
+ * from https://developer.android.com/codelabs/basic-android-kotlin-compose-navigation#0
+ */
+
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -41,6 +47,8 @@ fun WheelOfFortuneApp(
     viewModel: AppViewModel = viewModel()
 ) {
     val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
 
     viewModel.selectWordAndCategory()
     viewModel.fillMatrix()
@@ -50,7 +58,6 @@ fun WheelOfFortuneApp(
             FortuneAppBar()
         }
     ) { innerPadding ->
-        //val uiState by viewModel.uiState
         NavHost(
             navController = navController,
             startDestination = WheelOfFortuneScreen.Start.name,
@@ -64,7 +71,6 @@ fun WheelOfFortuneApp(
                  )
             }
             composable(route = WheelOfFortuneScreen.Game.name){
-
                 GameScreen(
                     onSpinClicked = { viewModel.spinTheWheel() },
                     onGameRulesClicked = { navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
