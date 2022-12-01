@@ -12,6 +12,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,10 @@ fun WheelOfFortuneApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
 
-    viewModel.newGame()
+    val matrix = remember {
+        viewModel.newGame()
+        mutableStateOf(viewModel.matrix)
+    }
 
     Scaffold(
         topBar = {
@@ -74,7 +79,8 @@ fun WheelOfFortuneApp(
                     onSpinClicked = { viewModel.spinTheWheel() },
                     onGameRulesClicked = { navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
                     onExitClicked = { exitProcess(0) },
-                    vm = viewModel
+                    vm = viewModel,
+                    matrix = matrix
                 )
             }
             composable(route = WheelOfFortuneScreen.GameHelp.name){

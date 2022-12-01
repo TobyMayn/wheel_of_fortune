@@ -1,5 +1,6 @@
 package com.example.s215778_wheel_of_fortune.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,7 +40,8 @@ fun GameScreen(
     onSpinClicked: () -> Unit,
     onGameRulesClicked: () -> Unit,
     onExitClicked: () -> Unit,
-    vm: AppViewModel) {
+    vm: AppViewModel,
+    matrix: MutableState<DisplayMatrix>) {
 
     Scaffold(
         backgroundColor = colorResource(id = R.color.app_background),
@@ -53,11 +55,6 @@ fun GameScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp))
             {
                 Spacer(modifier = Modifier.height(0.dp))
-
-
-                val matrix = remember {
-                    mutableStateOf(vm.matrix)
-                }
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(14),
@@ -80,6 +77,7 @@ fun GameScreen(
                         }
                     }
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
                 val category = vm.category
@@ -90,12 +88,21 @@ fun GameScreen(
                     backgroundColor = colorResource(id = R.color.app_red),
                     shape = RoundedCornerShape(0.dp)) {
                     Box(contentAlignment = Alignment.Center) {
-                        Text(text = category,
-                            textAlign = TextAlign.Center,
-                            color = colorResource(id = R.color.app_cream),
-                            fontFamily = halantBold,
-                            fontSize = 22.sp
-                        )
+                        if (category.length < 20){
+                            Text(text = category,
+                                textAlign = TextAlign.Center,
+                                color = colorResource(id = R.color.app_cream),
+                                fontFamily = halantBold,
+                                fontSize = 22.sp
+                            )
+                        } else {
+                            Text(text = category,
+                                textAlign = TextAlign.Center,
+                                color = colorResource(id = R.color.app_cream),
+                                fontFamily = halantBold,
+                                fontSize = 12.sp
+                            )
+                        }
                     }
                 }
 
@@ -200,6 +207,7 @@ fun GameScreen(
     )
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun GameScreenPreview(modifier: Modifier = Modifier){
@@ -212,6 +220,7 @@ fun GameScreenPreview(modifier: Modifier = Modifier){
         onSpinClicked = {},
         onGameRulesClicked = {},
         onExitClicked = {},
-        vm = vm
+        vm = vm,
+        matrix = mutableStateOf(DisplayMatrix())
     )
 }

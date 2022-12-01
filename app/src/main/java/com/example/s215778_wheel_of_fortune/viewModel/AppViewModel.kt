@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.s215778_wheel_of_fortune.R
 import com.example.s215778_wheel_of_fortune.model.*
+import kotlin.random.Random
 import kotlin.system.exitProcess
 
 class AppViewModel : ViewModel(){
@@ -306,9 +307,10 @@ class AppViewModel : ViewModel(){
         fillMatrix()
     }
 
-    fun newGame() {
+    fun newGame(): DisplayMatrix {
         resetGame()
         gameRunning = true
+        return _matrix
     }
 
 }
