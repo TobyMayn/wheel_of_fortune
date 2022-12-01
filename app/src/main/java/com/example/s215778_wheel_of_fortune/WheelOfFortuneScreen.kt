@@ -50,8 +50,7 @@ fun WheelOfFortuneApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
 
-    viewModel.selectWordAndCategory()
-    viewModel.fillMatrix()
+    viewModel.newGame()
 
     Scaffold(
         topBar = {

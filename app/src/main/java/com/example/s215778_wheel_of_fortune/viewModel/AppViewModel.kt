@@ -14,8 +14,14 @@ import com.example.s215778_wheel_of_fortune.model.*
 import kotlin.system.exitProcess
 
 class AppViewModel : ViewModel(){
-    private lateinit var _category: String
-    private lateinit var _word : String
+
+    /*
+    * All variables and values used
+    *
+     */
+
+    private var _category: String = ""
+    private var _word : String = ""
 
     private var _matrix = DisplayMatrix()
     private val _user = User()
@@ -23,7 +29,7 @@ class AppViewModel : ViewModel(){
 
     private var guesses = ""
     private var _spinResult: String = ""
-    private var _categories = listOf(
+    private val _categories = listOf(
         Categories.fictionalCharacters,
         Categories.occupation,
         Categories.onTheMap,
@@ -145,7 +151,7 @@ class AppViewModel : ViewModel(){
                             if(guess.text != "" && guess.text.length < 2) {
                                 openDialog.value = false
                                 checkGuessAndUpdatePlayer()
-                                checkGameWon()
+                                checkGameWonOrLost()
                             }
                         }) {
                             Text(text = "Confirm guess")
@@ -170,7 +176,7 @@ class AppViewModel : ViewModel(){
         var count = 0
         for (i in 0..3){
             for (j in 0..13) {
-                if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
+                if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char.value?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
                     count++
                     updateCards(_matrix.matrix[i][j])
                 }
@@ -218,18 +224,23 @@ class AppViewModel : ViewModel(){
         resetScore()
     }
 
-    private fun checkGameWon(){
-        var count = 0
-        for (i in 0..3){
-            for (j in 0..13) {
-                if(_matrix.matrix[i][j].active.value){
-                    count++
+    private fun checkGameWonOrLost(){
+        if(_user.lives.value == 0){
+            gameRunning = false
+        } else {
+            var count = 0
+            for (i in 0..3){
+                for (j in 0..13) {
+                    if(_matrix.matrix[i][j].active.value){
+                        count++
+                    }
                 }
             }
+            if(count == _word.length) {
+                gameRunning = false
+            }
         }
-        if(count == _word.length) {
-            gameRunning = false
-        }
+
     }
 
     @Composable
@@ -239,7 +250,7 @@ class AppViewModel : ViewModel(){
                 onDismissRequest ={},
                 confirmButton = {
                     Button(onClick = {
-                        gameRunning = true
+                        newGame()
                     }) {
                         Text(text = "Start New Game")
                     }
@@ -252,10 +263,19 @@ class AppViewModel : ViewModel(){
                     }
                 },
                 title = {
-                    Text(text = "Game Won!")
+                    if(_user.lives.value == 0 ){
+                        Text(text = "Game Lost!")
+                    } else {
+                        Text(text = "Game Won!")
+                    }
                 },
                 text = {
-                    Text(text = "Congrats, you've won the game!!")
+                    if(_user.lives.value == 0 ){
+                        Text(text = "Sad face, you've lost the game!!")
+                    } else {
+                        Text(text = "Congrats, you've won the game!!")
+                    }
+
                 }
             )
         }
@@ -266,11 +286,13 @@ class AppViewModel : ViewModel(){
         if (openDialog.value) {
             makeGuess(openDialog = openDialog)
         }
-        else if(!gameRunning) {
-            gameWon()
-        }
+
+        gameWon()
+
     }
     private fun resetValues(){
+        _word = ""
+        _category = ""
         _matrix = DisplayMatrix()
         _spinResult = ""
         guesses = ""
@@ -286,6 +308,7 @@ class AppViewModel : ViewModel(){
 
     fun newGame() {
         resetGame()
+        gameRunning = true
     }
 
 }

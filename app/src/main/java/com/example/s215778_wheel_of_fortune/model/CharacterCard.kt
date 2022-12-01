@@ -6,6 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 
 class CharacterCard constructor(character: Char?, active: Boolean, cardColor: Int){
     var active:  MutableState<Boolean> = mutableStateOf(active)
-    var char: Char? = character
-    var cardColor: Int = cardColor
+    var char: MutableState<Char?> = mutableStateOf(character)
+    var cardColor: MutableState<Int> = mutableStateOf(cardColor)
 }

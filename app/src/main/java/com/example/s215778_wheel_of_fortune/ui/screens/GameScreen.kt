@@ -54,23 +54,26 @@ fun GameScreen(
             {
                 Spacer(modifier = Modifier.height(0.dp))
 
-                val matrix by remember { mutableStateOf(vm.matrix)}
+
+                val matrix = remember {
+                    mutableStateOf(vm.matrix)
+                }
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(14),
                     contentPadding = PaddingValues(10.dp),
                     content = {
                         for (i in 0..3){
-                            items(matrix.matrix[i]) { item ->
+                            items(matrix.value.matrix[i]) { item ->
                                 Card (
                                     modifier = Modifier
                                         .padding(3.dp)
                                         .height(30.dp),
-                                    backgroundColor = colorResource(id = item.cardColor),
+                                    backgroundColor = colorResource(id = item.cardColor.value),
                                     shape = RoundedCornerShape(0.dp)
                                 ) {
                                     if(item.active.value)
-                                        Text(text = item.char.toString(),
+                                        Text(text = item.char.value.toString(),
                                             textAlign = TextAlign.Center)
                                 }
                             }
