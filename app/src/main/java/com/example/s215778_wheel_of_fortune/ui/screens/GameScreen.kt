@@ -40,8 +40,7 @@ fun GameScreen(
     onSpinClicked: () -> Unit,
     onGameRulesClicked: () -> Unit,
     onExitClicked: () -> Unit,
-    vm: AppViewModel,
-    matrix: MutableState<DisplayMatrix>) {
+    vm: AppViewModel) {
 
     Scaffold(
         backgroundColor = colorResource(id = R.color.app_background),
@@ -55,6 +54,10 @@ fun GameScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp))
             {
                 Spacer(modifier = Modifier.height(0.dp))
+
+                var matrix: MutableState<DisplayMatrix> = remember {
+                    mutableStateOf(vm.newGame())
+                }
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(14),
@@ -220,7 +223,6 @@ fun GameScreenPreview(modifier: Modifier = Modifier){
         onSpinClicked = {},
         onGameRulesClicked = {},
         onExitClicked = {},
-        vm = vm,
-        matrix = mutableStateOf(DisplayMatrix())
+        vm = vm
     )
 }

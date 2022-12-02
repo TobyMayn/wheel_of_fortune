@@ -294,7 +294,6 @@ class AppViewModel : ViewModel(){
     private fun resetValues(){
         _word = ""
         _category = ""
-        _matrix = DisplayMatrix()
         _spinResult = ""
         guesses = ""
 

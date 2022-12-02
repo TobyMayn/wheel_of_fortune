@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.s215778_wheel_of_fortune.model.DisplayMatrix
 import com.example.s215778_wheel_of_fortune.ui.*
 import com.example.s215778_wheel_of_fortune.ui.components.TopBar
 import com.example.s215778_wheel_of_fortune.ui.screens.*
@@ -52,10 +50,6 @@ fun WheelOfFortuneApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?: WheelOfFortuneScreen.Start.name
 
-    val matrix = remember {
-        viewModel.newGame()
-        mutableStateOf(viewModel.matrix)
-    }
 
     Scaffold(
         topBar = {
@@ -77,10 +71,9 @@ fun WheelOfFortuneApp(
             composable(route = WheelOfFortuneScreen.Game.name){
                 GameScreen(
                     onSpinClicked = { viewModel.spinTheWheel() },
-                    onGameRulesClicked = { navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
+                    onGameRulesClicked = {navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
                     onExitClicked = { exitProcess(0) },
-                    vm = viewModel,
-                    matrix = matrix
+                    vm = viewModel
                 )
             }
             composable(route = WheelOfFortuneScreen.GameHelp.name){
