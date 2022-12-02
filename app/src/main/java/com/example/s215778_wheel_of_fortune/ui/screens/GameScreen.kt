@@ -38,7 +38,6 @@ import kotlin.system.exitProcess
 fun GameScreen(
     modifier: Modifier = Modifier,
     onSpinClicked: () -> Unit,
-    onGameRulesClicked: () -> Unit,
     onExitClicked: () -> Unit,
     vm: AppViewModel) {
 
@@ -113,7 +112,7 @@ fun GameScreen(
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                    Text(text = "Lives",
+                    Text(text = stringResource(id = R.string.lives),
                         textAlign = TextAlign.Center,
                         color = colorResource(id = R.color.app_cream),
                         fontFamily = halantRegular,
@@ -129,7 +128,7 @@ fun GameScreen(
                     }
 
                     Spacer(modifier = Modifier.height(25.dp))
-                    Text(text = "Score",
+                    Text(text = stringResource(id = R.string.score),
                         textAlign = TextAlign.Center,
                         color = colorResource(id = R.color.app_cream),
                         fontFamily = halantRegular,
@@ -144,52 +143,25 @@ fun GameScreen(
                 }
                 Spacer(modifier = Modifier.height(25.dp))
 
-                var spinResult by remember { mutableStateOf("") }
-                val openDialog = remember {mutableStateOf(false)}
-                vm.gameLoop(openDialog = openDialog)
-                Text(
-                    text = spinResult,
-                    textAlign = TextAlign.Center,
-                    color = colorResource(id = R.color.app_cream),
-                    fontFamily = halantRegular,
-                    fontSize = 16.sp
-                )
+
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.height(180.dp)){
                     Image(imageVector = ImageVector.vectorResource(id = R.drawable.ellipse_1),
                         contentDescription = "eclipse", modifier = Modifier.align(Alignment.BottomCenter))
-                    Button(onClick = {
-                        onSpinClicked()
-                        spinResult = vm.spinResult
-                        openDialog.value = true
-                    },
-                        shape = RoundedCornerShape(100),
-                        modifier = Modifier
-                            .size(88.dp)
-                            .align(Alignment.TopCenter),
-                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
 
-                    ) {
-                        Text(text = "Spin the wheel",
-                            textAlign = TextAlign.Center,
-                            color = colorResource(id = R.color.app_cream),
-                        )
-                    }
+                    var spinResult by remember { mutableStateOf("") }
+                    val openDialog = remember {mutableStateOf(false)}
+                    vm.gameLoop(openDialog = openDialog)
+                    Text(
+                        text = spinResult,
+                        textAlign = TextAlign.Center,
+                        color = colorResource(id = R.color.app_cream),
+                        fontFamily = halantRegular,
+                        fontSize = 16.sp
+                    )
+
                     Row(modifier = Modifier.align(Alignment.CenterStart)) {
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Button(onClick = { onGameRulesClicked() },
-                            shape = RoundedCornerShape(100),
-                            modifier = Modifier
-                                .size(88.dp),
-                            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+                        Spacer(modifier = Modifier.width(30.dp))
 
-                        ) {
-                            Text(text = "Game Rules",
-                                textAlign = TextAlign.Center,
-                                color = colorResource(id = R.color.app_cream),
-                                )
-                        }
-                    }
-                    Row(modifier = Modifier.align(Alignment.CenterEnd)) {
                         Button(onClick = { onExitClicked() },
                             shape = RoundedCornerShape(100),
                             modifier = Modifier
@@ -197,12 +169,33 @@ fun GameScreen(
                             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
 
                         ) {
-                            Text(text = "Exit Game",
+                            Text(
+                                text = stringResource(id = R.string.exit_game),
                                 textAlign = TextAlign.Center,
                                 color = colorResource(id = R.color.app_cream),
                             )
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+
+                        Button(onClick = {
+                            onSpinClicked()
+                            spinResult = vm.spinResult
+                            openDialog.value = true
+                        },
+                            shape = RoundedCornerShape(100),
+                            modifier = Modifier
+                                .size(88.dp),
+                            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.spin_wheel),
+                                textAlign = TextAlign.Center,
+                                color = colorResource(id = R.color.app_cream),
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(30.dp))
                     }
                 }
             }
@@ -210,7 +203,6 @@ fun GameScreen(
     )
 }
 
-@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun GameScreenPreview(modifier: Modifier = Modifier){
@@ -221,7 +213,6 @@ fun GameScreenPreview(modifier: Modifier = Modifier){
 
     GameScreen(
         onSpinClicked = {},
-        onGameRulesClicked = {},
         onExitClicked = {},
         vm = vm
     )

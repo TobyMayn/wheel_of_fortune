@@ -1,5 +1,6 @@
 package com.example.s215778_wheel_of_fortune.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -31,7 +32,10 @@ fun TopBar(
             fontSize = 32.sp
         )
         },
-        colors = TopAppBarDefaults.topAppBarColors(colorResource(id = color)),
-        modifier = Modifier.padding(top = padding)
+        colors = TopAppBarDefaults.topAppBarColors( colorResource(id = color)),
+        modifier = Modifier
+            .background(color = colorResource(id = color))
+            .padding(top = padding),
+
     )
 }

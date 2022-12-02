@@ -19,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.example.s215778_wheel_of_fortune.ui.components.StartScreenButton
@@ -48,19 +49,19 @@ fun StartScreen (
                 Spacer(modifier = Modifier.height(260.dp))
 
                 StartScreenButton(
-                    text = "Start Game",
+                    text = stringResource(id = R.string.start_button),
                     onClick = {onStartClicked()})
 
                 Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
-                    text = "Game Rules",
+                    text = stringResource(id = R.string.game_help_button),
                     onClick = {onGameRulesClicked()})
 
                 Spacer(modifier = Modifier.height(50.dp))
 
                 StartScreenButton(
-                    text = "Exit Game",
+                    text = stringResource(id = R.string.exit_game),
                     onClick = {onExitClicked()})
             }
         }

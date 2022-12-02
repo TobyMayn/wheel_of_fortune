@@ -1,10 +1,9 @@
 package com.example.s215778_wheel_of_fortune.viewModel
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -94,7 +93,7 @@ class AppViewModel : ViewModel(){
             }
         }
     }
-    /*TODO: Maybe use built-in search function to search chars, maybe faster?*/
+
     // Helper function for fillMatrix
     private fun insertLettersTop(){
         for (i in 0..3){
@@ -154,20 +153,26 @@ class AppViewModel : ViewModel(){
                                 checkGuessAndUpdatePlayer()
                                 checkGameWonOrLost()
                             }
-                        }) {
-                            Text(text = "Confirm guess")
+                        },
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))) {
+                            Text(text = stringResource(id = R.string.confirm_guess))
                         }
                         guesses = guess.text},
                     title = {
-                        Text(text = "Make a guess")
+                        Text(text = stringResource(id = R.string.make_guess_title))
                     },
                     text = {
                         TextField(
                             value = guess,
                             onValueChange = {guess = it},
-                            label = { Text(text = "Guess")},
+                            label = { Text(text = "Guess", color = colorResource(id = R.color.app_background))},
+                            colors = TextFieldDefaults.textFieldColors(
+                                focusedIndicatorColor = colorResource(id = R.color.app_red),
+                                cursorColor = colorResource(id = R.color.app_red)
+                            )
                         )
-                    }
+                    },
+                    backgroundColor = colorResource(id = R.color.app_cream)
                 )
             }
         }
@@ -250,34 +255,35 @@ class AppViewModel : ViewModel(){
             AlertDialog(
                 onDismissRequest ={},
                 confirmButton = {
-                    Button(onClick = {
-                        newGame()
-                    }) {
-                        Text(text = "Start New Game")
+                    Button(onClick = {  newGame() },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+                    ) {
+                        Text(text = stringResource(id = R.string.start_new_game))
                     }
                 },
                 dismissButton = {
-                    Button(onClick = {
-                        exitProcess(0)
-                    }) {
-                        Text(text = "Exit Game")
+                    Button(onClick = { exitProcess(0) },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.app_red))
+                    )
+                    {
+                        Text(text = stringResource(id = R.string.exit_game))
                     }
                 },
                 title = {
                     if(_user.lives.value == 0 ){
-                        Text(text = "Game Lost!")
+                        Text(text = stringResource(id = R.string.game_lost_title))
                     } else {
-                        Text(text = "Game Won!")
+                        Text(text = stringResource(id = R.string.game_won_title))
                     }
                 },
                 text = {
                     if(_user.lives.value == 0 ){
-                        Text(text = "Sad face, you've lost the game!!")
+                        Text(text = stringResource(id = R.string.game_lost_text))
                     } else {
-                        Text(text = "Congrats, you've won the game!!")
+                        Text(text = stringResource(id = R.string.game_won_text))
                     }
-
-                }
+                },
+                backgroundColor = colorResource(id = R.color.app_cream)
             )
         }
     }

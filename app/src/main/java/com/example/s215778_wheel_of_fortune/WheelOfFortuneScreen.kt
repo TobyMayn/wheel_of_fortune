@@ -71,7 +71,6 @@ fun WheelOfFortuneApp(
             composable(route = WheelOfFortuneScreen.Game.name){
                 GameScreen(
                     onSpinClicked = { viewModel.spinTheWheel() },
-                    onGameRulesClicked = {navController.navigate(WheelOfFortuneScreen.GameHelp.name)},
                     onExitClicked = { exitProcess(0) },
                     vm = viewModel
                 )

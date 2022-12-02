@@ -1,3 +1,50 @@
 <resources>
     <string name="app_name">s215778_wheel_of_fortune</string>
+    <string name="start_button">Start Game</string>
+    <string name="game_help_button">Game Rules</string>
+    <string name="exit_game">Exit Game</string>
+    <string name="lives">Lives</string>
+    <string name="score">Score</string>
+    <string name="spin_wheel">Spin the wheel</string>
+    <string name="confirm_guess">Confirm guess</string>
+    <string name="make_guess_title">Make a guess</string>
+    <string name="start_new_game">Start New Game</string>
+    <string name="game_lost_title">Game Lost!</string>
+    <string name="game_won_title">Game Won!</string>
+    <string name="game_lost_text">Sad face, you\'ve lost the game!!</string>
+    <string name="game_won_text">Congrats, you\'ve won the game!!</string>
+
+
+
+
+    <string-array name="game_rules_array">
+        <item>Rules of the Game</item>
+
+        <item>1. The game is for one player.</item>
+
+        <item>2. A word is randomly chosen from predefined categories and
+            displayed along with the category.</item>
+
+        <item>3. The word is displayed with the letters hidden.</item>
+
+        <item>4. The player “spins the wheel”.</item>
+
+        <item>5. The possible results of the “spinning the wheel” are:
+             a number of points e.g 1000 or “bankrupt”.</item>
+
+        <item>6. In the event of a value being shown, a letter (consonant or vowel) is chosen by the user
+            (from a keyboard or otherwise). If the letter is present, the user’s points total is
+            incremented by the value shown times the number of occurrences of the letter. The
+            occurrences of the letter are revealed in the word.</item>
+
+        <item>7. If the letter is not present the user loses a “life”.</item>
+
+        <item>8. In the event of “bankrupt” being shown, the user loses all their points.</item>
+
+        <item>9. The “wheel is spun” until the game is won or lost.</item>
+
+        <item>10. The game is won when all the letters have been found and the user still has a life.</item>
+
+        <item>11. A user starts with 5 “lives”.</item>
+    </string-array>
 </resources>
