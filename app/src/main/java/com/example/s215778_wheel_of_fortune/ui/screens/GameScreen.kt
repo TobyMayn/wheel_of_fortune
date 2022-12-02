@@ -150,7 +150,7 @@ fun GameScreen(
 
                     var spinResult by remember { mutableStateOf("") }
                     val openDialog = remember {mutableStateOf(false)}
-                    vm.gameLoop(openDialog = openDialog)
+                    vm.GameLoop(openDialog = openDialog)
                     Text(
                         text = spinResult,
                         textAlign = TextAlign.Center,

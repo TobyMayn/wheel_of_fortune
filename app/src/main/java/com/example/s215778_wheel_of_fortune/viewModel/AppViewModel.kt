@@ -49,12 +49,10 @@ class AppViewModel : ViewModel(){
     val lives: Int
         get() = _user.lives.value
 
-    val matrix: DisplayMatrix
-        get() = _matrix
-
     val category: String
         get() = _category
 
+    // Selects a random word and category from the categories table
     fun selectWordAndCategory() {
         val random = (0..4).random()
         //Select Category
@@ -64,6 +62,9 @@ class AppViewModel : ViewModel(){
         _word = _categories[random][(1..9).random()]
     }
 
+    // Fills matrix depending on length of word to be guessed
+    // if word is longer than 20 characters, it is inserted from the top
+    // if word is <= 20 characters it is inserted in the middle of the matrix
     fun fillMatrix() {
         when(_word.length) {
             in 0 ..20 -> {insertLettersMid()}
@@ -137,6 +138,9 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Prompts the user make a guess
+    // Only accepts one character at a time. Meaning a guess can't be
+    // empty or more than 1 character in length
     @Composable
     fun makeGuess(openDialog: MutableState<Boolean>) {
         if(_spinResult == "Bankrupt"){
@@ -178,11 +182,16 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Checks if a player has made a correct guess
+    // if so how many characters and has the character already been guessed before
     private fun checkGuessAndUpdatePlayer(){
         var count = 0
         for (i in 0..3){
             for (j in 0..13) {
-                if((guesses[0].lowercaseChar() == _matrix.matrix[i][j].char.value?.lowercaseChar()) && (!_matrix.matrix[i][j].active.value)){
+                val guessedChar = _matrix.matrix[i][j].char.value?.lowercaseChar()
+                val isGuessedChar = _matrix.matrix[i][j].active.value
+
+                if((guesses[0].lowercaseChar() == guessedChar) && (!isGuessedChar)){
                     count++
                     updateCards(_matrix.matrix[i][j])
                 }
@@ -191,10 +200,14 @@ class AppViewModel : ViewModel(){
         updatePlayer(_spinResult.toInt(), count)
     }
 
+    // Sets active value of characterCard to true if character is correctly guessed
     private fun updateCards(card: CharacterCard){
          card.active.value = true
     }
 
+    // Updates the player, either by updating the score or lives
+    // If multiple chars has been correctly guessed the total value is calculated
+    // and added to the score
     private fun updatePlayer(score: Int, count: Int) {
         var calcAmount = 0
         if(count != 0) {
@@ -217,6 +230,7 @@ class AppViewModel : ViewModel(){
         _user.lives.value -= 1
     }
 
+    // Spins the wheel, by picking a random number from the spin list
     fun spinTheWheel(){
         _spinResult = spin.points[(0..9).random()]
     }
@@ -230,6 +244,7 @@ class AppViewModel : ViewModel(){
         resetScore()
     }
 
+    // Checks wether a player has won or lost the game
     private fun checkGameWonOrLost(){
         if(_user.lives.value == 0){
             gameRunning = false
@@ -249,8 +264,11 @@ class AppViewModel : ViewModel(){
 
     }
 
+
+    // If the game is over
+    // asks the player if a new game should be started or the game should be closed
     @Composable
-    private fun gameWon(){
+    private fun gameWonOrLost(){
         if(!gameRunning){
             AlertDialog(
                 onDismissRequest ={},
@@ -288,15 +306,17 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Function that runs all the checks, to keep the game running
     @Composable
-    fun gameLoop (openDialog: MutableState<Boolean>){
+    fun GameLoop (openDialog: MutableState<Boolean>){
         if (openDialog.value) {
             makeGuess(openDialog = openDialog)
         }
 
-        gameWon()
-
+        gameWonOrLost()
     }
+    // Helper function for resetGame()
+    // Sets all relevant values to their initial value
     private fun resetValues(){
         _word = ""
         _category = ""
@@ -304,6 +324,8 @@ class AppViewModel : ViewModel(){
         guesses = ""
 
     }
+
+    // Helper function for newGame()
     private fun resetGame(){
         resetUser()
         resetValues()
@@ -312,6 +334,8 @@ class AppViewModel : ViewModel(){
         fillMatrix()
     }
 
+    // Creates new game, by resetting all used values to their initial state
+    // and returns a matrix used in the GameScreen
     fun newGame(): DisplayMatrix {
         resetGame()
         gameRunning = true
